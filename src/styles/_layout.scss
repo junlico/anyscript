@@ -1,0 +1,133 @@
+@use "./variables";
+
+$space: variables.$space;
+$tablet: 768px;
+$laptop: 1440px;
+
+@mixin mobile {
+  @media screen and (max-width: $tablet - 1px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: $tablet) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media screen and (min-width: $laptop) {
+    @content;
+  }
+}
+
+@mixin set-col($media: "") {
+  @each $i in (2, 3, 4, 6, 12) {
+    .col#{$media}-#{$i} {
+      flex: none;
+      width: (100% / 12) * $i;
+    }
+  }
+}
+
+.row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: (-$space);
+  margin-left: (-$space);
+
+  &.dense {
+    margin-top: (-$space);
+    margin-bottom: (-$space);
+  }
+}
+
+.col {
+  flex: 1;
+  padding: $space;
+}
+
+@include set-col();
+
+@include mobile() {
+  @include set-col("-mobile");
+}
+
+@include tablet() {
+  @include set-col("-tablet");
+}
+
+@include laptop() {
+  @include set-col("-laptop");
+}
+
+.display-none {
+  display: none;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.flex-h-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-h-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-v-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.overflow-auto {
+  overflow-y: auto;
+}
+
+@each $key, $attr in ("p": "padding", "m": "margin") {
+  @for $i from 0 through 3 {
+    $value: if($i == 0, 0, $space * $i);
+
+    .#{$key}-#{$i} {
+      #{$attr}: $value;
+    }
+
+    .#{$key}-h-#{$i} {
+      #{$attr}-right: $value;
+      #{$attr}-left: $value;
+    }
+
+    .#{$key}-v-#{$i} {
+      #{$attr}-top: $value;
+      #{$attr}-bottom: $value;
+    }
+
+    .#{$key}-t-#{$i} {
+      #{$attr}-top: $value;
+    }
+
+    .#{$key}-b-#{$i} {
+      #{$attr}-bottom: $value;
+    }
+  }
+}
+
+.m-auto {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.m-n-1 {
+  margin-right: (-$space);
+  margin-left: (-$space);
+}
